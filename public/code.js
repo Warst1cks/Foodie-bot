@@ -1,5 +1,3 @@
-const { stringify } = require("nodemon/lib/utils");
-
 const chatForm = document.getElementById("chat-form");
 const chatMessage = document.querySelector(".chat-messages");
 
@@ -57,6 +55,7 @@ const displayOrder = (orders) => {
 };
 
 const orderHistory = (orders) => {
+  console.log(orders);
   const message = `Your Order History : \n <ul> ${orders
     .map((order) => `<li>${order.name}</li>`)
     .join("")} </ul> \n
@@ -106,7 +105,8 @@ socket.on("botResponse", ({ type, data }) => {
       displayMessage(data.message, true);
       break;
     case "order-history":
-      orderHistory(stringify(data));
+      orderHistory(data);
+
       break;
     case "no-order-history":
       displayMessage(data.message,true);
