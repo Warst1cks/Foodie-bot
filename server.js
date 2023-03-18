@@ -36,6 +36,9 @@ const PORT = 3500 || process.env.PORT;
 
 //Setting the static path
 app.use(express.static("public"));
+app.use((err, req, res, next) => {
+  console.log(err.stack);
+})
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
@@ -94,7 +97,8 @@ io.on("connection", (socket) => {
           socket.emit("botResponse", {
             type: "no-checkout",
             data: {
-              message: "You have no order to checkout,type 1 to place an order!",
+              message:
+                "You have no order to checkout,type 1 to place an order!",
             },
           });
         } else {
@@ -129,6 +133,13 @@ io.on("connection", (socket) => {
         }
 
         break;
+      // case msg === "98":
+      //   socket.emit("botResponse", {
+      //     type: "order-history",
+      //     data: session.orders,
+      //   });
+
+      //   break;
 
       //to see current order
       case msg === "97":
@@ -153,7 +164,8 @@ io.on("connection", (socket) => {
           socket.emit("botResponse", {
             type: "no-cancel",
             data: {
-              message: "No order to cancel! \n type 1 to place an order or 0 to cancel order",
+              message:
+                "No order to cancel! \n type 1 to place an order or 0 to cancel order",
             },
           });
         } else {
@@ -194,3 +206,4 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+

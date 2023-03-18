@@ -1,3 +1,5 @@
+const { stringify } = require("nodemon/lib/utils");
+
 const chatForm = document.getElementById("chat-form");
 const chatMessage = document.querySelector(".chat-messages");
 
@@ -104,7 +106,7 @@ socket.on("botResponse", ({ type, data }) => {
       displayMessage(data.message, true);
       break;
     case "order-history":
-      orderHistory(data);
+      orderHistory(stringify(data));
       break;
     case "no-order-history":
       displayMessage(data.message,true);
@@ -132,3 +134,4 @@ chatForm.addEventListener("submit", (e) => {
 
 //output message to DOM
 function outputMessage(message) {}
+
