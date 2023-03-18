@@ -124,9 +124,8 @@ io.on("connection", (socket) => {
         } else {
           socket.emit("botResponse", {
             type: "order-history",
-            data: {
-              message: `${session.orders} \n type 1 to place another order or 0 to cancel order!`,
-            },
+            data: session.orders,
+            
           });
           session.orders = [];
           session.save();
