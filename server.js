@@ -17,7 +17,7 @@ db.connectToMongoDB();
 
 var store = new MongoDBStore({
   uri: process.env.MONGODB_CONNECTION_URI,
-  collection: "mySessions",
+  collection: "userSessions",
 });
 
 const sessionMiddleware = session({
@@ -41,9 +41,10 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-const botName = "ChatBot";
+const botName = "SamBot";
 
 const options = [
+  "Welcome to SamBot!",
   "Type 1 to Place an order",
   "Type 99 to checkout order",
   "Type 98 to see order history",
@@ -52,16 +53,16 @@ const options = [
 ];
 
 const menus = [
-  { id: 2, name: "Cheeseburger" },
-  { id: 3, name: "Grilled Chicken Sandwich" },
-  { id: 4, name: "Caesar Salad" },
-  { id: 5, name: "Spaghetti and Meatballs" },
-  { id: 6, name: "Fish and Chips" },
-  { id: 7, name: "Chicken Alfredo" },
-  { id: 8, name: "Steak Frites" },
-  { id: 9, name: "Veggie Burger" },
-  { id: 10, name: "French Onion Soup" },
-  { id: 11, name: "Chocolate Cake" },
+//   { id: 2, name: "Catfish pepper soup" },
+//   { id: 3, name: "Pounded yam and ogbono soup" },
+  { id: 4, name: "Jollof rice and chiken with Salad" },
+  { id: 5, name: "White rice and stew" },
+  { id: 6, name: "French fries with crispy chicken" },
+  { id: 7, name: "Bread and beans" },
+  { id: 8, name: "Amala and Ewedu" },
+  { id: 9, name: "Pounded yam and Edikaikong soup" },
+//   { id: 10, name: "Afang soup with Eba" },
+//   { id: 11, name: "Fufu and Egusi soup" },
 ];
 
 const orders = [];
@@ -77,7 +78,7 @@ io.on("connection", (socket) => {
 
   console.log("someone connected!..", session.id);
 
-  socket.emit("welcome", { options });
+  socket.emit("welcome 🎉👏", { options });
 
   socket.on("chatMessage", (msg) => {
     //Regex for 2-11, to pick a menu
@@ -93,26 +94,50 @@ io.on("connection", (socket) => {
         if (session.orders.length == 0) {
           socket.emit("botResponse", {
             type: "no-checkout",
-            data: { message: "You have no order to checkout" },
+            data: {
+              message: "You have no order to checkout😢,type 1 to place an order!",
+            },
           });
         } else {
           socket.emit("botResponse", {
             type: "checkout",
-            data: session.orders,
+            data: {
+              message: `${session.orders} \n type 1 to place another order or 0 to cancel order!`,
+            },
           });
           session.orders = [];
           session.save();
         }
 
         break;
-      //to see order history
+      //   to see order history
+      // case msg === "98":
+      //   socket.emit("botResponse", {
+      //     type: "order-history",
+      //     data: session.orders,
+      //   });
+      //   break;
       case msg === "98":
-        socket.emit("botResponse", {
-          type: "order-history",
-          data: session.orders,
-        });
+        if (session.orders.length == 0) {
+          socket.emit("botResponse", {
+            type: "no-order-history",
+            data: {
+              message: "You have no order 😢! \n type 1 to place an order!",
+            },
+          });
+        } else {
+          socket.emit("botResponse", {
+            type: "order-history",
+            data: {
+              message: `${session.orders} \n type 1 to place another order or 0 to cancel order!`,
+            },
+          });
+          session.orders = [];
+          session.save();
+        }
 
         break;
+
       //to see current order
       case msg === "97":
         if (session.orders.length == 0) {
@@ -120,7 +145,7 @@ io.on("connection", (socket) => {
             type: "no-order",
             data: {
               message:
-                "You have not made any order yet!  Type 1 to Place an order",
+                "You have not made any order yet! \n Type 1 to Place an order!",
             },
           });
         } else {
@@ -136,15 +161,14 @@ io.on("connection", (socket) => {
           socket.emit("botResponse", {
             type: "no-cancel",
             data: {
-              message: "No order to cancel",
+              message: "No order to cancel! \n type 1 to place an order🙂",
             },
           });
         } else {
           socket.emit("botResponse", {
             type: "cancel",
             data: {
-              message: `You just cancelled your order of ${session.orders.length} item(s)
-                `,
+              message: `You just cancelled your order of ${session.orders.length} item(s) \n type : 1.To place a new order \n 98.To see Order history`,
             },
           });
           session.orders = [];
@@ -169,7 +193,7 @@ io.on("connection", (socket) => {
         socket.emit("botResponse", {
           type: "wrong-input" || "null",
           data: {
-            message: `Your input is wrong, Try again!`,
+            message: `Your input is wrong ❌ \n  Type 1 to place order!`,
           },
         });
         break;

@@ -33,8 +33,8 @@ a {
 .btn {
     cursor: pointer;
     padding: 5px 15px;
-    background: var(--light-color);
-    color: var(--dark-color-a);
+    background: #fff;;
+    color:#111;
     border: 0;
     font-size: 17px;
 }
@@ -49,14 +49,23 @@ a {
 }
 
 .chat-header {
-    background: var(--dark-color-a);
-    color: #fff;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background: #111;
+        height: 50px;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 10px;
+        color:#fff;
+        text-align: center;
+        font-size: 15px;    
+}
+  #logo{
+    font-size: 18px;
+        color: #eee;
+        font-weight: 600;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        padding-top: 15px;
 }
 
 .chat-main {
@@ -125,7 +134,7 @@ a {
 
 .chat-form-container {
     padding: 20px 30px;
-    background-color: var(--dark-color-a);
+    background-color:#111;
 }
 
 .chat-form-container form {

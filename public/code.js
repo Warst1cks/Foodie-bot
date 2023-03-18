@@ -31,14 +31,14 @@ const displayOrder = (orders) => {
     const newOrder = orders.filter((value) => value !== null);
     const message = `There is an invalid order, You ordered for : \n <ul> ${newOrder
       .map((order) => `<li>${order.name}</li>`)
-      .join("")} </ul> \n\n <br> Select 0 to cancel order `;
+      .join("")} </ul> \n\n <br> Select 1 so you can place an order! `;
 
     console.log(newOrder);
 
     displayMessage(message, true);
   } else {
     const options = [
-      "Continue your order by clicking 2 - 11",
+      "Want to order more,type 1 to view our menu!",
       "Type 99 to checkout order",
       "Type 98 to see order history",
       "Type 97 to see current order",
@@ -54,23 +54,24 @@ const displayOrder = (orders) => {
   }
 };
 
-const displayCheckout = (orders) => {
-  const message = `Checkout : \n <ul> ${orders
-    .map((order) => `<li>${order.name}</li>`)
-    .join("")} </ul>`;
-  displayMessage(message, true);
-};
-
 const orderHistory = (orders) => {
   const message = `Your Order History : \n <ul> ${orders
     .map((order) => `<li>${order.name}</li>`)
-    .join("")} </ul>`;
+    .join("")} </ul> \n
+    type 1 to place another order or 0 to cancel order!.`;
   displayMessage(message, true);
 };
 //When a user connects
 socket.on("connect", () => {
   console.log("You are connected:", socket.id);
 });
+const displayCheckout = (orders) => {
+  const message = `Checkout : \n <ul> ${orders
+    .map((order) => `<li>${order.name}</li>`)
+    .join("")} </ul> type 1 if you wish to place another order!`;
+  displayMessage(message, true);
+};
+
 
 socket.on("welcome", ({ options }) => {
   displayOptions(options);
@@ -88,7 +89,7 @@ socket.on("botResponse", ({ type, data }) => {
       displayMessage(data.message, true);
       break;
     case "checkout":
-      displayCheckout(data);
+      displayCheckout(data.message);
       break;
     case "no-order":
       displayMessage(data.message, true);
@@ -104,6 +105,9 @@ socket.on("botResponse", ({ type, data }) => {
       break;
     case "order-history":
       orderHistory(data);
+      break;
+    case "no-order-history":
+      displayMessage(data.message,true);
       break;
     default:
       displayMessage(data.message, true);
