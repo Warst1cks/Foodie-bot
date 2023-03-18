@@ -50,7 +50,7 @@ const displayOrder = (orders) => {
       .join("")} </ul>`;
     console.log("message", message);
     displayMessage(message, true);
-    displayOptions(options);
+    displayOptions(options); 
   }
 };
 

@@ -53,16 +53,14 @@ const options = [
 ];
 
 const menus = [
-//   { id: 2, name: "Catfish pepper soup" },
-//   { id: 3, name: "Pounded yam and ogbono soup" },
+  { id: 2, name: "Catfish pepper soup" },
+  { id: 3, name: "Pounded yam and ogbono soup" },
   { id: 4, name: "Jollof rice and chiken with Salad" },
   { id: 5, name: "White rice and stew" },
   { id: 6, name: "French fries with crispy chicken" },
   { id: 7, name: "Bread and beans" },
   { id: 8, name: "Amala and Ewedu" },
   { id: 9, name: "Pounded yam and Edikaikong soup" },
-//   { id: 10, name: "Afang soup with Eba" },
-//   { id: 11, name: "Fufu and Egusi soup" },
 ];
 
 const orders = [];
@@ -78,11 +76,12 @@ io.on("connection", (socket) => {
 
   console.log("someone connected!..", session.id);
 
-  socket.emit("welcome 🎉👏", { options });
+  socket.emit("welcome", { options });
 
   socket.on("chatMessage", (msg) => {
     //Regex for 2-11, to pick a menu
     const pattern = /^[2-9]|1[0-1]$/;
+    // console.log(pattern)
 
     switch (true) {
       //Places an order
@@ -95,7 +94,7 @@ io.on("connection", (socket) => {
           socket.emit("botResponse", {
             type: "no-checkout",
             data: {
-              message: "You have no order to checkout😢,type 1 to place an order!",
+              message: "You have no order to checkout,type 1 to place an order!",
             },
           });
         } else {
@@ -110,19 +109,12 @@ io.on("connection", (socket) => {
         }
 
         break;
-      //   to see order history
-      // case msg === "98":
-      //   socket.emit("botResponse", {
-      //     type: "order-history",
-      //     data: session.orders,
-      //   });
-      //   break;
       case msg === "98":
         if (session.orders.length == 0) {
           socket.emit("botResponse", {
             type: "no-order-history",
             data: {
-              message: "You have no order 😢! \n type 1 to place an order!",
+              message: "You have no order ! \n type 1 to place an order!",
             },
           });
         } else {
@@ -161,14 +153,14 @@ io.on("connection", (socket) => {
           socket.emit("botResponse", {
             type: "no-cancel",
             data: {
-              message: "No order to cancel! \n type 1 to place an order🙂",
+              message: "No order to cancel! \n type 1 to place an order or 0 to cancel order",
             },
           });
         } else {
           socket.emit("botResponse", {
             type: "cancel",
             data: {
-              message: `You just cancelled your order of ${session.orders.length} item(s) \n type : 1.To place a new order \n 98.To see Order history`,
+              message: `You just cancelled your order of ${session.orders.length} item(s) \n type : 1.To place a new order`,
             },
           });
           session.orders = [];
@@ -193,7 +185,7 @@ io.on("connection", (socket) => {
         socket.emit("botResponse", {
           type: "wrong-input" || "null",
           data: {
-            message: `Your input is wrong ❌ \n  Type 1 to place order!`,
+            message: `Your input is wrong  \n  Type 1 to place order!`,
           },
         });
         break;
