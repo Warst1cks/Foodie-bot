@@ -59,7 +59,7 @@ const orderHistory = (orders) => {
   const message = `Your Order History : \n <ul> ${orders
     .map((order) => `<li>${order.name}</li>`)
     .join("")} </ul> \n
-    type 1 to place another order or 0 to cancel order!.`;
+    <ul> Type 1 to place another order or 0 to cancel order!.</ul>`;
   displayMessage(message, true);
 };
 //When a user connects
@@ -69,7 +69,7 @@ socket.on("connect", () => {
 const displayCheckout = (orders) => {
   const message = `Checkout : \n <ul> ${orders
     .map((order) => `<li>${order.name}</li>`)
-    .join("")} </ul> type 1 if you wish to place another order!`;
+    .join("")} </ul> \n <ul> type 1 if you wish to place another order! </ul>`;
   displayMessage(message, true);
 };
 
@@ -90,7 +90,7 @@ socket.on("botResponse", ({ type, data }) => {
       displayMessage(data.message, true);
       break;
     case "checkout":
-      displayCheckout(data.message);
+      displayCheckout(data);
       break;
     case "no-order":
       displayMessage(data.message, true);

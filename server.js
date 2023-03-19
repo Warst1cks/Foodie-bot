@@ -91,56 +91,43 @@ io.on("connection", (socket) => {
       case msg === "1":
         socket.emit("botResponse", { type: "menu", data: menus });
         break;
+
       //to checkout order
       case msg === "99":
         if (session.orders.length == 0) {
           socket.emit("botResponse", {
             type: "no-checkout",
-            data: {
-              message:
-                "You have no order to checkout,type 1 to place an order!",
-            },
+            data: { message: "You have no order to checkout" },
           });
         } else {
           socket.emit("botResponse", {
             type: "checkout",
-            data: {
-              message: `${session.orders} \n type 1 to place another order or 0 to cancel order!`,
-            },
+            data: session.orders,
           });
           session.orders = [];
           session.save();
         }
-
-        break;
+      break;
+      //order history
       case msg === "98":
         if (session.orders.length == 0) {
           socket.emit("botResponse", {
             type: "no-order-history",
             data: {
-              message: "You have no order ! \n type 1 to place an order!",
+              message: "You have no order history after checkout! \n type 1 to place an order!",
             },
           });
         } else {
           socket.emit("botResponse", {
             type: "order-history",
             data: session.orders,
-            
           });
           session.orders = [];
           session.save();
         }
 
         break;
-      // case msg === "98":
-      //   socket.emit("botResponse", {
-      //     type: "order-history",
-      //     data: session.orders,
-      //   });
-
-      //   break;
-
-      //to see current order
+      // check current order
       case msg === "97":
         if (session.orders.length == 0) {
           socket.emit("botResponse", {
