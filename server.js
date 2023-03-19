@@ -32,7 +32,7 @@ app.use(sessionMiddleware);
 
 io.use((socket, next) => sessionMiddleware(socket.request, {}, next));
 
-const PORT = 5000 || process.env.PORT;
+const PORT = process.env.PORT;
 
 //Setting the static path
 app.use(express.static("public"));
