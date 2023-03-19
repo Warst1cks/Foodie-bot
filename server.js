@@ -44,6 +44,10 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+app.get("/health-check",(req,res) => { 
+res.status(200).send("OK")
+});
+
 const botName = "SamBot";
 
 const options = [
